@@ -7,8 +7,11 @@ import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split
+import flasgger
+from flasgger import Swagger
 
 app = Flask(__name__)
+# Swagger(app)
 
 df = pd.read_csv('Transformed_Dataset.csv')
 df.head(5)
@@ -26,9 +29,12 @@ X_test = scaler.transform(X_test)
 model = tf.keras.models.load_model("model.h5")
 
 
-
 @app.route("/")
 def welcome():
+    return "Welcome All"
+
+@app.route("/Sample")
+def predict():
     
     single_house = df.drop('price',axis=1).iloc[0]
     single_house = scaler.transform(single_house.values.reshape(-1,19))
@@ -38,8 +44,113 @@ def welcome():
 
 
 
-@app.route("/input")
-def predicting():
+@app.route("/Input The Values")
+def predict_1():
+    """Let's Predict the price of the house.
+    This is using docstrings for specifications.
+    ---
+    parameters:
+      - name: Bedrooms
+        in: query
+        type: float
+        required: true
+    
+      - name: Bathrooms
+        in: query
+        type: float
+        required: true
+        
+      - name: sqft_living
+        in: query
+        type: float
+        required: true
+        
+      - name: sqft_lot
+        in: query
+        type: float
+        required: true
+        
+      - name: floors
+        in: query
+        type: float
+        required: true
+        
+      - name: waterfront
+        in: query
+        type: float
+        required: true
+        
+      - name: view
+        in: query
+        type: float
+        required: true
+        
+      - name: Condition
+        in: query
+        type: float
+        required: true
+        
+      - name: Grade
+        in: query
+        type: float
+        required: true
+        
+      - name: sqft_above
+        in: query
+        type: float
+        required: true
+        
+      - name: sqft_basement
+        in: query
+        type: float
+        required: true
+        
+      - name: yr_built
+        in: query
+        type: float
+        required: true
+        
+      - name: yr_renovated
+        in: query
+        type: float
+        required: true
+        
+      - name: latitue
+        in: query
+        type: float
+        required: true
+        
+      - name: longitue
+        in: query
+        type: float
+        required: true
+        
+      - name: sqft_living15
+        in: query
+        type: float
+        required: true
+        
+      - name: sqft_lot15
+        in: query
+        type: float
+        required: true
+        
+      - name: Year_sold
+        in: query
+        type: float
+        required: true
+        
+      - name: Month_sold
+        in: query
+        type: float
+        required: true
+    responses:
+        1:
+            description: The expected value is: 
+        
+    
+    """
+    
     bedrooms = request.args.get('bedroom')
     bathrooms = request.args.get('bathroom')
     sqft_living = request.args.get('sqft_living')
