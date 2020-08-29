@@ -25,23 +25,46 @@ X_test = scaler.transform(X_test)
 
 model = tf.keras.models.load_model("model.h5")
 
-single_house = df.drop('price',axis=1).iloc[0]
-single_house = scaler.transform(single_house.values.reshape(-1,19))
 
 
 @app.route("/")
 def welcome():
-    x = model.predict(single_house)
-    y = str(x)
-    return y
+    
+    single_house = df.drop('price',axis=1).iloc[0]
+    single_house = scaler.transform(single_house.values.reshape(-1,19))
+    
+    x = str(float((model.predict(single_house))))
+    return "The predicted value is "+x + str(single_house)
 
-# @app.route("/predict_file", methods=["POST"])
-# def predict_house_price():
 
-      
-#     df_test = pd.read_csv(request.files.get('files'))
-#     predictions = model.predict(df_test)
-#     return 'The predicted values is '+ str(predictions) 
+
+@app.route("/input")
+def predicting():
+    bedrooms = request.args.get('bedroom')
+    bathrooms = request.args.get('bathroom')
+    sqft_living = request.args.get('sqft_living')
+    sqft_lot = request.args.get('sqft_lot')
+    floors = request.args.get('floors')
+    waterfront = request.args.get('waterfront')
+    view = request.args.get('view')
+    condition = request.args.get('condition')
+    grade = request.args.get('grade')
+    sqft_above = request.args.get('sqft_above')
+    sqft_basement = request.args.get('sqft_basement')
+    yr_built = request.args.get('yr_built')
+    yr_renovated = request.args.get('yr_renovated')
+    lat = request.args.get('lat')
+    long = request.args.get('long')
+    sqft_living15 = request.args.get('sqft_living15')
+    sqft_lot15 = request.args.get('sqft_lot15')
+    year_sold = request.args.get('year_sold')
+    month_sold = request.args.get('month_sold')
+    
+    test_case = np.array([bedrooms,bathrooms,sqft_living,sqft_lot,floors,waterfront,view,condition,grade,sqft_above,sqft_basement,yr_built,yr_renovated,lat,long,sqft_living15,sqft_lot15,year_sold,month_sold])
+    test_case = scaler.transform(test_case.reshape(-1,19))
+    
+    y = str(float((model.predict(test_case))))
+    return "The predicted value is "+y 
  
 if __name__ =='__main__':
     app.run()
