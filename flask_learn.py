@@ -11,7 +11,7 @@ import flasgger
 from flasgger import Swagger
 
 app = Flask(__name__)
-# Swagger(app)
+Swagger(app)
 
 df = pd.read_csv('Transformed_Dataset.csv')
 df.head(5)
@@ -50,103 +50,103 @@ def predict_1():
     This is using docstrings for specifications.
     ---
     parameters:
-      - name: Bedrooms
+      - name: bedroom
         in: query
-        type: float
+        type: number
         required: true
     
-      - name: Bathrooms
+      - name: bathroom
         in: query
-        type: float
+        type: number
         required: true
         
       - name: sqft_living
         in: query
-        type: float
+        type: number
         required: true
         
       - name: sqft_lot
         in: query
-        type: float
+        type: number
         required: true
         
       - name: floors
         in: query
-        type: float
+        type: number
         required: true
         
       - name: waterfront
         in: query
-        type: float
+        type: number
         required: true
         
       - name: view
         in: query
-        type: float
+        type: number
         required: true
         
-      - name: Condition
+      - name: condition
         in: query
-        type: float
+        type: number
         required: true
         
-      - name: Grade
+      - name: grade
         in: query
-        type: float
+        type: number
         required: true
         
       - name: sqft_above
         in: query
-        type: float
+        type: number
         required: true
         
       - name: sqft_basement
         in: query
-        type: float
+        type: number
         required: true
         
       - name: yr_built
         in: query
-        type: float
+        type: number
         required: true
         
       - name: yr_renovated
         in: query
-        type: float
+        type: number
         required: true
         
-      - name: latitue
+      - name: lat
         in: query
-        type: float
+        type: number
         required: true
         
-      - name: longitue
+      - name: long
         in: query
-        type: float
+        type: number
         required: true
         
       - name: sqft_living15
         in: query
-        type: float
+        type: number
         required: true
         
       - name: sqft_lot15
         in: query
-        type: float
+        type: number
         required: true
         
-      - name: Year_sold
+      - name: year_sold
         in: query
-        type: float
+        type: number
         required: true
         
-      - name: Month_sold
+      - name: month_sold
         in: query
-        type: float
+        type: number
         required: true
     responses:
-        1:
-            description: The expected value is: 
+        200:
+            description: The output values
         
     
     """
@@ -175,6 +175,7 @@ def predict_1():
     test_case = scaler.transform(test_case.reshape(-1,19))
     
     y = str(float((model.predict(test_case))))
+    print(y)
     return "The predicted value is "+y 
  
 if __name__ =='__main__':
