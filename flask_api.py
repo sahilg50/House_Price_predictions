@@ -38,7 +38,7 @@ def predict():
     features = [float(x) for x in request.form.values()]
     features = np.array([features])
     
-    single_house = scaler.transform(features.values.reshape(-1,19))
+    single_house = scaler.transform(features.reshape(-1,19))
     
     predictions = float(model.predict(single_house))
     result = round(predictions, 2)
