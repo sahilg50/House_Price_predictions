@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  
+</head>
+
+<body>
+ <div class="login">
+	<h1>Predict Salary Analysis</h1>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict')}}"method="post">
+    	<input type="text" name="bedrooms" placeholder="bedrooms" required="required" />
+        <input type="text" name="bathrooms" placeholder="bathrooms" required="required" />
+		<input type="text" name="sqft_living" placeholder="sqft_living" required="required" />
+		<input type="text" name="sqft_lot" placeholder="sqft_lot" required="required" />
+		<input type="text" name="floors" placeholder="floors" required="required" />
+		<input type="text" name="waterfront" placeholder="waterfront" required="required" />
+		<input type="text" name="view" placeholder="view" required="required" />
+		<input type="text" name="condition" placeholder="condition" required="required" />
+		<input type="text" name="grade" placeholder="grade" required="required" />
+		<input type="text" name="sqft_above" placeholder="sqft_above" required="required" />
+		<input type="text" name="sqft_basement" placeholder="sqft_basement" required="required" />
+		<input type="text" name="yr_built" placeholder="yr_built" required="required" />
+		<input type="text" name="yr_renovated" placeholder="yr_renovated" required="required" />
+		<input type="text" name="lat" placeholder="lat" required="required" />
+		<input type="text" name="long" placeholder="long" required="required" />
+		<input type="text" name="sqft_living15" placeholder="sqft_living15" required="required" />
+		<input type="text" name="sqft_lot15" placeholder="sqft_lot15" required="required" />
+		<input type="text" name="year_sold" placeholder="year_sold" required="required" />
+		<input type="text" name="month_sold" placeholder="month_sold" required="required" />
+		
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+
+   <br>
+   <br>
+   {{ prediction_text }}
+
+ </div>
+
+
+</body>
+</html>

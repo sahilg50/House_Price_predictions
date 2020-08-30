@@ -1,20 +1,16 @@
 """
 @author: Sahil
 """
-from flask import Flask,request
+from flask import Flask, request, jsonify, render_template
 import pandas as pd
 import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split
-import flasgger
-from flasgger import Swagger
 
 app = Flask(__name__)
-Swagger(app)
 
 df = pd.read_csv('Transformed_Dataset.csv')
-df.head(5)
 
 scaler = RobustScaler()
 X = df.drop('price',axis=1).values
@@ -30,155 +26,28 @@ model = tf.keras.models.load_model("model.h5")
 
 
 @app.route("/")
-def welcome():
-    return "Welcome All"
+def home():
+    return render_template('index.html')
 
-@app.route("/Sample")
+@app.route("/predict", methods=['POST'])
 def predict():
-    
-    single_house = df.drop('price',axis=1).iloc[0]
-    single_house = scaler.transform(single_house.values.reshape(-1,19))
-    
-    x = str(float((model.predict(single_house))))
-    return "The predicted value is "+x + str(single_house)
-
-
-
-@app.route("/Input The Values")
-def predict_1():
-    """Let's Predict the price of the house.
-    This is using docstrings for specifications.
-    ---
-    parameters:
-      - name: bedroom
-        in: query
-        type: number
-        required: true
-    
-      - name: bathroom
-        in: query
-        type: number
-        required: true
-        
-      - name: sqft_living
-        in: query
-        type: number
-        required: true
-        
-      - name: sqft_lot
-        in: query
-        type: number
-        required: true
-        
-      - name: floors
-        in: query
-        type: number
-        required: true
-        
-      - name: waterfront
-        in: query
-        type: number
-        required: true
-        
-      - name: view
-        in: query
-        type: number
-        required: true
-        
-      - name: condition
-        in: query
-        type: number
-        required: true
-        
-      - name: grade
-        in: query
-        type: number
-        required: true
-        
-      - name: sqft_above
-        in: query
-        type: number
-        required: true
-        
-      - name: sqft_basement
-        in: query
-        type: number
-        required: true
-        
-      - name: yr_built
-        in: query
-        type: number
-        required: true
-        
-      - name: yr_renovated
-        in: query
-        type: number
-        required: true
-        
-      - name: lat
-        in: query
-        type: number
-        required: true
-        
-      - name: long
-        in: query
-        type: number
-        required: true
-        
-      - name: sqft_living15
-        in: query
-        type: number
-        required: true
-        
-      - name: sqft_lot15
-        in: query
-        type: number
-        required: true
-        
-      - name: year_sold
-        in: query
-        type: number
-        required: true
-        
-      - name: month_sold
-        in: query
-        type: number
-        required: true
-    responses:
-        200:
-            description: The output values
-        
-    
+    """
+    For rendering results on HTML GUI
     """
     
-    bedrooms = request.args.get('bedroom')
-    bathrooms = request.args.get('bathroom')
-    sqft_living = request.args.get('sqft_living')
-    sqft_lot = request.args.get('sqft_lot')
-    floors = request.args.get('floors')
-    waterfront = request.args.get('waterfront')
-    view = request.args.get('view')
-    condition = request.args.get('condition')
-    grade = request.args.get('grade')
-    sqft_above = request.args.get('sqft_above')
-    sqft_basement = request.args.get('sqft_basement')
-    yr_built = request.args.get('yr_built')
-    yr_renovated = request.args.get('yr_renovated')
-    lat = request.args.get('lat')
-    long = request.args.get('long')
-    sqft_living15 = request.args.get('sqft_living15')
-    sqft_lot15 = request.args.get('sqft_lot15')
-    year_sold = request.args.get('year_sold')
-    month_sold = request.args.get('month_sold')
+    features = [float(x) for x in request.form.values()]
+    features = np.array([features])
     
-    test_case = np.array([bedrooms,bathrooms,sqft_living,sqft_lot,floors,waterfront,view,condition,grade,sqft_above,sqft_basement,yr_built,yr_renovated,lat,long,sqft_living15,sqft_lot15,year_sold,month_sold])
-    test_case = scaler.transform(test_case.reshape(-1,19))
+    single_house = scaler.transform(features.values.reshape(-1,19))
     
-    y = str(float((model.predict(test_case))))
-    print(y)
-    return "The predicted value is "+y 
+    predictions = float(model.predict(single_house))
+    result = round(predictions, 2)
+    
+    return render_template('index.html', prediction_text='The Expected price of the house should be {}'.format(result)) 
+
+    
  
 if __name__ =='__main__':
-    app.run()
+    app.run(debug=True)
 
 
