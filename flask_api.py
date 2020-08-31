@@ -37,11 +37,12 @@ def predict():
     
     features = [float(x) for x in request.form.values()]
     features = np.array([features])
+    features = features.reshape(-1,19)
     
-    single_house = scaler.transform(features.reshape(-1,19))
+    single_house = scaler.transform(features)
     
     predictions = float(model.predict(single_house))
-    result = round(predictions, 2)
+    result =  round(predictions, 2)
     
     return render_template('index.html', prediction_text='The Expected price of the house should be {}'.format(result)) 
 
