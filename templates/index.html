@@ -1,52 +1,138 @@
 <!DOCTYPE html>
 <html >
-<!--From https://codepen.io/frytyler/pen/EGdtg-->
+
 <head>
-  <meta charset="UTF-8">
+   <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Poiret+One&family=Quantico:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <title>ML API</title>
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-  
+
+<style type="text/css">
+.button{
+	background: transparent;
+	/color: rgba(255,255,255,1);/
+	transition: all 0.5s;
+	border: 1px solid black;
+	position: relative;	
+}
+
+
+.button::before{
+	text-decoration-color: grey;
+	content: 'Please Wait...';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	background-color: gray;
+	transition: all 0.4s;
+	transform: scale(1, 0.5);
+}
+.button:hover::before{
+	opacity: 1;
+	-webkit-transform: scale(1, 1);
+	transform: scale(1, 1);
+}
+	
+</style>
+
 </head>
 
-<body>
- <div class="login">
-	<h1>Predict Salary Analysis</h1>
+<body class="bg-light">
 
-     <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict')}}"method="post">
-    	<input type="text" name="bedrooms" placeholder="bedrooms" required="required" />
-        <input type="text" name="bathrooms" placeholder="bathrooms" required="required" />
-		<input type="text" name="sqft_living" placeholder="sqft_living" required="required" />
-		<input type="text" name="sqft_lot" placeholder="sqft_lot" required="required" />
-		<input type="text" name="floors" placeholder="floors" required="required" />
-		<input type="text" name="waterfront" placeholder="waterfront" required="required" />
-		<input type="text" name="view" placeholder="view" required="required" />
-		<input type="text" name="condition" placeholder="condition" required="required" />
-		<input type="text" name="grade" placeholder="grade" required="required" />
-		<input type="text" name="sqft_above" placeholder="sqft_above" required="required" />
-		<input type="text" name="sqft_basement" placeholder="sqft_basement" required="required" />
-		<input type="text" name="yr_built" placeholder="yr_built" required="required" />
-		<input type="text" name="yr_renovated" placeholder="yr_renovated" required="required" />
-		<input type="text" name="lat" placeholder="lat" required="required" />
-		<input type="text" name="long" placeholder="long" required="required" />
-		<input type="text" name="sqft_living15" placeholder="sqft_living15" required="required" />
-		<input type="text" name="sqft_lot15" placeholder="sqft_lot15" required="required" />
-		<input type="text" name="year_sold" placeholder="year_sold" required="required" />
-		<input type="text" name="month_sold" placeholder="month_sold" required="required" />
-		
+	<h1 class="text-center py-3 bg-secondary" style="font-family: 'Montserrat';">Predict Salary Analysis</h1>
+	<div class="container">
+		<div class="login" style="font-family: 'Poiret One';">
+			
+     		<!-- Main Input For Receiving Query to our ML -->
+    		<form action="{{ url_for('predict')}}"method="post" class="pt-3">
 
-        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-    </form>
+				<div class="form-row">
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="bedrooms" placeholder="Bedrooms" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="bathrooms" placeholder="Bathrooms" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="sqft_living" placeholder="Living Room (Sq ft)" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="sqft_lot" placeholder="Lot (Sq ft)" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="floors" placeholder="No of Floors" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="waterfront" placeholder="Waterfront" required="">
+				    </div>
+				 </div>
 
-   <br>
-   <br>
-   {{ prediction_text }}
+				<div class="form-row">
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="view" placeholder="View" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="condition" placeholder="Condition" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="grade" placeholder="Grade" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="sqft_above" placeholder="Above (Sq ft)" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="sqft_basement" placeholder="Basement (Sq ft)" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="yr_built" placeholder="Built" required="">
+				    </div>
+				 </div>
+
+				 <div class="form-row">
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="yr_renovated" placeholder="Year Renovated" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="lat" placeholder="Latitude" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="long" placeholder="Longitude" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="sqft_living15" placeholder="Living 15 (Sq ft)" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="sqft_lot15" placeholder="Lot 15 (Sq ft)" required="">
+				    </div>
+				    <div class="form-group col-md-2 col-sm-6">
+				      <input type="text" class="form-control" name="year_sold" placeholder="Year Sold" required="">
+				    </div>
+				 </div>
+    	
+				<div class="form-row justify-content-center">
+					<div class="form-group col-md-2 col-sm-6">
+						<input type="text" class="form-control" name="month_sold" placeholder="Months Old" required="" />
+					</div>
+				</div>
+				<div><button type="submit" class="button btn-lg btn-block">Predict</button></div>
+    		</form>
+
+   			<br>
+   			<br>
+   			<div class="text-center border border-success py-2">
+   				<strong style="font-family: 'Montserrat';">{{ prediction_text }}</strong>
+   			</div>
+   
 
  </div>
 
+	</div>
+ 
 
 </body>
 </html>
